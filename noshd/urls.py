@@ -19,11 +19,12 @@ from rest_framework import routers
 from noshdapp import views
 from django.conf.urls import url
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
+from noshdapp.views import RegistrationAPIView
+
 
 router = routers.DefaultRouter(trailing_slash=False)
-router.register(r'post', views.PostViewSet)
-router.register(r'users', views.UserViewSet)
-router.register(r'groups', views.GroupViewSet)
+router.register(r'post', views.RestaurantPostViewSet)
+router.register(r'user', views.UserViewSet)
 
 
 urlpatterns = [
