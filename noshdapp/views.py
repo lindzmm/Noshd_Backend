@@ -1,35 +1,49 @@
 from django.http import HttpResponse
-from .models import Post
+from .models import RestaurantPost, User
 from rest_framework import viewsets
-from noshdapp.serializers import PostSerializer, UserSerializer, GroupSerializer
+from noshdapp.serializers import RestaurantPostSerializer, RegistrationSerializer, UserSerializer
 from django.shortcuts import render
-from django.contrib.auth.models import User, Group
+from rest_framework import status
+from rest_framework.permissions import AllowAny
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .renderers import UserJSONRenderer
 
 
+from django.contrib.auth.models import Group
 
-class PostViewSet(viewsets.ModelViewSet):
+
+class RestaurantPostViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows courses to be viewed or edited.
     """
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
+    queryset = RestaurantPost.objects.all()
+    serializer_class = RestaurantPostSerializer
+
 
 class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
+
+class RegistrationAPIView(APIView):
+    # Allow any user (authenticated or not) to hit this endpoint.
+    permission_classes = (AllowAny,)
+    renderer_classes = (UserJSONRenderer,)
+    serializer_class = RegistrationSerializer
+
+    def post(self, request):
+        user = request.data.get('user', {})
+
+        # The create serializer, validate serializer, save serializer pattern
+        # below is common and you will see it a lot throughout this course and
+        # your own work later on. Get familiar with it.
+        serializer = self.serializer_class(data=user)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-def index(request):
-    def get(self, request, **kwargs):
-        return render(request, 'index.html', context=None)
+
 

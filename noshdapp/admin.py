@@ -1,5 +1,10 @@
 from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from .models import Post
+from .models import RestaurantPost, User
 
-admin.site.register(Post)
+admin.site.register(RestaurantPost)
+
+admin.site.register(User)
+

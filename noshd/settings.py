@@ -33,7 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'rest_framework',
-    'noshdapp.apps.NoshdappConfig',
+    'noshdapp',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,7 +45,7 @@ INSTALLED_APPS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
@@ -128,6 +128,8 @@ JWT_AUTH = {
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:4200',
 )
+
+AUTH_USER_MODEL = 'noshdapp.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
