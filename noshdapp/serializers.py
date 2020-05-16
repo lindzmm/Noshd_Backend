@@ -3,7 +3,9 @@ from rest_framework import serializers
 from django.contrib.auth.models import Group
 
 
-class RestaurantPostSerializer(serializers.HyperlinkedModelSerializer):
+class RestaurantPostSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(many=False)
+
     class Meta:
         model = RestaurantPost
         fields = '__all__'
@@ -13,7 +15,7 @@ class RestaurantPostSerializer(serializers.HyperlinkedModelSerializer):
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = 'username', 'email'
+        fields = 'username', 'email', 'url'
 
 
 class RegistrationSerializer(serializers.ModelSerializer):

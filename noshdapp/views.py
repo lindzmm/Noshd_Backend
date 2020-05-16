@@ -20,6 +20,9 @@ class RestaurantPostViewSet(viewsets.ModelViewSet):
     queryset = RestaurantPost.objects.all()
     serializer_class = RestaurantPostSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
