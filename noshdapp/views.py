@@ -1,7 +1,7 @@
 from django.http import HttpResponse
-from .models import RestaurantPost, User
+from .models import RestaurantPost, User, UserFollowing
 from rest_framework import viewsets
-from noshdapp.serializers import RestaurantPostSerializer, RegistrationSerializer, UserSerializer
+from noshdapp.serializers import RestaurantPostSerializer, RegistrationSerializer, UserSerializer, FollowingSerializer
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.permissions import AllowAny
@@ -27,6 +27,7 @@ class RestaurantPostViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    lookup_field = 'username'
 
 
 class RegistrationAPIView(APIView):
@@ -48,5 +49,7 @@ class RegistrationAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-
+class UserFollowingViewSet(viewsets.ModelViewSet):
+    queryset = UserFollowing.objects.all()
+    serializer_class = FollowingSerializer
 

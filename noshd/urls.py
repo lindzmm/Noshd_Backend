@@ -25,6 +25,7 @@ from noshdapp.views import RegistrationAPIView
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'post', views.RestaurantPostViewSet)
 router.register(r'user', views.UserViewSet)
+router.register(r'following', views.UserFollowingViewSet)
 
 
 urlpatterns = [
