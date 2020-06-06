@@ -15,7 +15,7 @@ from django.contrib.auth.models import Group
 
 class RestaurantPostViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows courses to be viewed or edited.
+    API endpoint that allows posts to be viewed or edited.
     """
     queryset = RestaurantPost.objects.all()
     serializer_class = RestaurantPostSerializer

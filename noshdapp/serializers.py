@@ -19,7 +19,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = 'username', 'email', 'url', 'following', 'followers'
+        fields = 'username', 'id', 'email', 'url', 'following', 'followers'
         extra_kwargs = {
             'url': {'lookup_field': 'username'}
         }
@@ -65,13 +65,13 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
 class FollowingSerializer(serializers.ModelSerializer):
     following_user_id = serializers.IntegerField
-    user_id = serializers.IntegerField
     following_user_username = serializers.SerializerMethodField()
+    user_id = serializers.IntegerField
     user_username = serializers.SerializerMethodField()
 
     class Meta:
         model = UserFollowing
-        fields = ("following_user_id", "user_id", "following_user_username", "user_username", "created")
+        fields = ("following_user_id", "following_user_username", "created", "user_id", "user_username", "id")
 
     def get_following_user_username(self, obj):
         return obj.following_user_id.username
