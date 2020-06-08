@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group
 
 
 class RestaurantPostSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField(many=False)
+    user = serializers.StringRelatedField()
 
     class Meta:
         model = RestaurantPost
@@ -14,21 +14,13 @@ class RestaurantPostSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    following = serializers.SerializerMethodField()
-    followers = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = 'username', 'id', 'email', 'url', 'following', 'followers'
+        fields = 'username', 'id', 'email', 'url'
         extra_kwargs = {
             'url': {'lookup_field': 'username'}
         }
-
-    def get_following(self, obj):
-        return FollowingSerializer(obj.following.all(), many=True).data
-
-    def get_followers(self, obj):
-        return FollowersSerializer(obj.followers.all(), many=True).data
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
