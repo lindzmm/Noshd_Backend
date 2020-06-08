@@ -2,6 +2,7 @@ import jwt
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.db.models import Q
 
 from datetime import datetime, timedelta
 
@@ -137,10 +138,31 @@ class User(AbstractBaseUser, PermissionsMixin):
         return token.decode('utf-8')
 
 
+class RestaurantPostQuerySet(models.QuerySet):
+    def feed(self, user):
+        profiles_exist = user.following.exists()
+        followed_users_id = []
+        if profiles_exist:
+            followed_users_id = user.following.values_list("following_user_id", flat=True)
+        return self.filter(
+            Q(user__id__in=followed_users_id) |
+            Q(user=user)
+        ).distinct().order_by("-pub_date")
+
+
+class RestaurantPostManager(models.Manager):
+    def get_queryset(self, *args, **kwargs):
+        return RestaurantPostQuerySet(self.model, using=self._db)
+
+    def feed(self, user):
+        return self.get_queryset().feed(user)
+
+
 class RestaurantPost(models.Model):
     user = models.ForeignKey(User, blank=True, null=True, default=1, on_delete=models.CASCADE)
     establishment_name = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
+    objects = RestaurantPostManager()
 
     def __str__(self):
         return self.establishment_name
